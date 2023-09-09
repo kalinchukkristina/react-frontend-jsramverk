@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import TrainList from './components/TrainList';
+import TrainDetail from './components/TrainDetail';
 
 function App() {
+  const [trains, setTrains] = useState([]);
+  const [selectedTrain, setSelectedTrain] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:1337/delayed')
+      .then((response) => response.json())
+      .then((data) => setTrains(data));
+  }, []);
+
+  const handleTrainClick = (train) => {
+    setSelectedTrain(train);
+  };
+
+  const handleReturnClick = () => {
+    setSelectedTrain(null)
+  }
+
+  const outputDelay = (item) => {
+    let advertised = new Date(item.AdvertisedTimeAtLocation);
+    let estimated = new Date(item.EstimatedTimeAtLocation);
+
+    const diff = Math.abs(estimated - advertised);
+
+    return Math.floor(diff / (1000 * 60)) + " minuter";
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {selectedTrain ? (
+        <TrainDetail selectedTrain={selectedTrain} onReturnClick={handleReturnClick} outputDelay={outputDelay}/>
+      ) : (
+        <TrainList trains={trains} onTrainClick={handleTrainClick} outputDelay={outputDelay} />
+      )}
     </div>
   );
 }
 
 export default App;
+
