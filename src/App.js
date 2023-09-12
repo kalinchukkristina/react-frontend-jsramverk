@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TrainList from './components/TrainList';
 import TrainDetail from './components/TrainDetail';
+import MapDetail from './components/MapDetail';
 import Tickets from './components/Tickets';
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
       ) : (
         <TrainList trains={trains} onTrainClick={handleTrainClick} outputDelay={outputDelay} />
       )}
+      <MapDetail />
     </div>
   );
 }
