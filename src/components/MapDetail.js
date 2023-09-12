@@ -30,12 +30,11 @@ const MapDetail = () => {
   const trainMarkers = Object.values(trainData);
 
   return (
-    <div>
-      <h1>Train Data</h1>
+    <div className="map-container">
       <MapContainer
         center={[62.173276, 14.942265]} // Initial map center coordinates
         zoom={5} // Initial zoom level
-        style={{ height: '400px', width: '100%' }}
+        style={{ height: '1000px', width: '100%' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
