@@ -18,6 +18,11 @@
 
 .ticketContainer {
 	padding: 2rem;
+	width: 50%;
+}
+
+.newTicketBtn {
+	margin-top: 15px;
 }
 
 .map-container {

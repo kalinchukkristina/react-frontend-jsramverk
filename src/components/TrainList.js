@@ -10,7 +10,7 @@ const TrainList = ({ trains, onTrainClick, outputDelay}) => {
               {trains.data.map((train, index) => (
                   <tr key={index} onClick={() => onTrainClick(train)}>
                     <td>{train.OperationalTrainNumber}</td>
-                    <td className='trainSignature'>{train.LocationSignature} <scope>{train.FromLocation ? train.FromLocation[0].LocationName + " -> " : ""} {train.ToLocation ? train.ToLocation[0].LocationName : ""}</scope></td>
+                    <td className='trainSignature'>{train.LocationSignature} <div>{train.FromLocation ? train.FromLocation[0].LocationName + " -> " : ""} {train.ToLocation ? train.ToLocation[0].LocationName : ""}</div></td>
                     <td>{outputDelay(train)}</td>
                   </tr>
                 ))
