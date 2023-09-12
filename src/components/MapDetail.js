@@ -67,7 +67,7 @@ const MapDetail = () => {
         {trainMarkers.map((train, index) => (
           <Marker
             key={index}
-            position={train.position} // Use your train data's position array
+            position={train.position}
           >
             <Popup>
               Train Number: {train.trainnumber}
