@@ -1,21 +1,34 @@
 .delayedTrainsList {
-  height: 100vh;
-  width: 40vw;
-  padding: 2rem;
-  overflow: scroll;
-  background-color: white;
+	height: 100vh;
+	width: 40vw;
+	padding: 2rem;
+	overflow: scroll;
+	background-color: white;
 }
 
 .trainSignature {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 .table-fixed {
-  table-layout: fixed;
+	table-layout: fixed;
 }
 
 .ticketContainer {
-  padding: 2rem;
+	padding: 2rem;
+}
+
+.map-container {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 60%;
+	height: 100vh;
+	background-color: #f0f0f0;
+	padding: 1rem;
+	box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	z-index: 1;
 }
