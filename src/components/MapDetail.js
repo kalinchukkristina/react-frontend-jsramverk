@@ -23,7 +23,7 @@ const MapDetail = () => {
   // Use the useEffect hook to set up and manage the socket connection
   useEffect(() => {
     // Create a socket connection to the specified server
-    const socket = io('http://localhost:1337'); // Connect to your Node.js server on port 1337
+    const socket = io('http://localhost:1337');
 
     // Event handler for when the socket successfully connects
     socket.on('connect', () => {
