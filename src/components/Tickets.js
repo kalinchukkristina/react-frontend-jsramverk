@@ -13,7 +13,6 @@ const Tickets = ({selectedTrain}) => {
     fetch('http://localhost:1337/tickets')
       .then((response) => response.json())
       .then((data) => setAllTickets(data.data));
-
     }, []);
 
   const handleSelectChange = (event) => {
@@ -22,13 +21,14 @@ const Tickets = ({selectedTrain}) => {
   };
 
   const handleSubmit = () => {
-    let newTicket = {
-      code: selectedCode.Code,
-      trainnumber: selectedTrain.OperationalTrainNumber,
-      traindate: selectedTrain.EstimatedTimeAtLocation.substring(0, 10),
-    };
+    if (selectedCode) {
+      let newTicket = {
+            code: selectedCode.Code,
+            trainnumber: selectedTrain.OperationalTrainNumber,
+            traindate: selectedTrain.EstimatedTimeAtLocation.substring(0, 10),
+          };
 
-    fetch("http://localhost:1337/tickets", {
+      fetch('http://localhost:1337/tickets', {
         body: JSON.stringify(newTicket),
         headers: {
           'content-type': 'application/json'
@@ -37,15 +37,19 @@ const Tickets = ({selectedTrain}) => {
       })
         .then((response) => response.json())
         .then((result) => {
-            setAllTickets([result.data, ...allTickets])
+            setAllTickets([result.data, ...allTickets]) //update the state variable alltickets with the new ticket
+        })
+        .catch((error) => {
+          console.error('Error adding ticket:', error.message);
         });
+    }
   }
 
   return (
     <div className='ticketContainer'>
       <div>
           <p>Orsakskod:</p>
-          <select onChange={handleSelectChange}>
+          <select className='form-select form-select-sm' onChange={handleSelectChange}>
           <option value="">Välj en kod...</option>
           {codes.map((code, index) => (
             <option key={index} value={index}>
@@ -53,8 +57,9 @@ const Tickets = ({selectedTrain}) => {
             </option>
           ))}
         </select>
-        <button onClick={handleSubmit}>Skapa nytt ärende</button>
+        <button className='btn btn-success newTicketBtn' onClick={handleSubmit}>Skapa nytt ärende</button>
       </div>
+      <hr />
       <div>
         <h3>Befintliga ärenden</h3>
         {allTickets.map((ticket, index) => (
@@ -66,4 +71,4 @@ const Tickets = ({selectedTrain}) => {
   )
 }
 
-export default Tickets
+export default Tickets;
