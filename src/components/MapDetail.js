@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css'; // Import Leaflet's CSS
 
 const MapDetail = () => {
-  const [trainData, setTrainData] = useState([]);
+  const [trainData, setTrainData] = useState({});
 
   useEffect(() => {
     const socket = io('http://localhost:1337'); // Connect to your Node.js server on port 1337
@@ -13,7 +15,11 @@ const MapDetail = () => {
 
     socket.on('message', (trainObject) => {
       // Update the state with the received train data
-      setTrainData((prevTrainData) => [...prevTrainData, trainObject]);
+      setTrainData((prevTrainData) => {
+        const updatedTrainData = { ...prevTrainData };
+        updatedTrainData[trainObject.trainnumber] = trainObject;
+        return updatedTrainData;
+      });
     });
 
     return () => {
@@ -21,16 +27,31 @@ const MapDetail = () => {
     };
   }, []);
 
+  const trainMarkers = Object.values(trainData);
+
   return (
     <div>
       <h1>Train Data</h1>
-      <ul>
-        {trainData.map((train, index) => (
-          <li key={index}>
-            Train Number: {train.trainnumber}, Position: {train.position}
-          </li>
+      <MapContainer
+        center={[62.173276, 14.942265]} // Initial map center coordinates
+        zoom={5} // Initial zoom level
+        style={{ height: '400px', width: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {trainMarkers.map((train, index) => (
+          <Marker
+            key={index}
+            position={train.position} // Use your train data's position array
+          >
+            <Popup>
+              Train Number: {train.trainnumber}
+            </Popup>
+          </Marker>
         ))}
-      </ul>
+      </MapContainer>
     </div>
   );
 };
