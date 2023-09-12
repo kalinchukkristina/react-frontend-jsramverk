@@ -23,12 +23,12 @@
 .map-container {
 	position: absolute;
 	top: 0;
-	right: 0; /* Adjust as needed for the desired position */
-	width: 60%; /* Adjust the width to control how much space it takes on the right */
+	right: 0;
+	width: 60%;
 	height: 100vh;
-	background-color: #f0f0f0; /* Adjust background color as needed */
-	padding: 1rem; /* Add padding for spacing */
-	box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2); /* Add shadow for separation */
-	overflow: hidden; /* Hide horizontal overflow if necessary */
-	z-index: 1; /* Adjust the z-index to control stacking order */
+	background-color: #f0f0f0;
+	padding: 1rem;
+	box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	z-index: 1;
 }
