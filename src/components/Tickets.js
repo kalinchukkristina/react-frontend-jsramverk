@@ -6,21 +6,21 @@ const Tickets = ({selectedTrain}) => {
   const [allTickets, setAllTickets] = useState([])
 
   useEffect(() => {
-    fetch('http://localhost:1337/codes')
+    fetch('http://localhost:1337/codes') //getting the reason codes from backend
       .then((response) => response.json())
       .then((data) => setCodes(data.data));
     
-    fetch('http://localhost:1337/tickets')
+    fetch('http://localhost:1337/tickets') //getting the list of existing tickets from backend
       .then((response) => response.json())
       .then((data) => setAllTickets(data.data));
     }, []);
 
-  const handleSelectChange = (event) => {
+  const handleSelectChange = (event) => { //callback function for selecting a reason code
     const selectedIndex = event.target.value;
     setSelectedCode(codes[selectedIndex]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = () => { //callback function for button 'Skapa nytt ärende'
     if (selectedCode) {
       let newTicket = {
             code: selectedCode.Code,
@@ -37,7 +37,7 @@ const Tickets = ({selectedTrain}) => {
       })
         .then((response) => response.json())
         .then((result) => {
-            setAllTickets([result.data, ...allTickets]) //update the state variable alltickets with the new ticket
+            setAllTickets([result.data, ...allTickets]) //update the state variable allTickets with the new ticket
         })
         .catch((error) => {
           console.error('Error adding ticket:', error.message);
