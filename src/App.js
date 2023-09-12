@@ -39,9 +39,11 @@ function App() {
           <Tickets selectedTrain={selectedTrain}></Tickets>
         </>
       ) : (
-        <TrainList trains={trains} onTrainClick={handleTrainClick} outputDelay={outputDelay} />
+        <>
+          <TrainList trains={trains} onTrainClick={handleTrainClick} outputDelay={outputDelay} />
+          <MapDetail />
+        </>
       )}
-      <MapDetail />
     </div>
   );
 }
