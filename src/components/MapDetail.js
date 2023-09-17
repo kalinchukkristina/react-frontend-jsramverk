@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css'; // Import Leaflet's CSS
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css"; // Import Leaflet's CSS
 
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import L from 'leaflet';
-
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import L from "leaflet";
 
 let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow
+  iconUrl: icon,
+  shadowUrl: iconShadow,
 });
-
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
@@ -23,15 +21,15 @@ const MapDetail = () => {
   // Use the useEffect hook to set up and manage the socket connection
   useEffect(() => {
     // Create a socket connection to the specified server
-    const socket = io('http://localhost:1337');
+    const socket = io("http://localhost:1337");
 
     // Event handler for when the socket successfully connects
-    socket.on('connect', () => {
-      console.log('Connected to server via socket.');
+    socket.on("connect", () => {
+      console.log("Connected to server via socket.");
     });
 
     // Event handler for when a 'message' event is received from the server
-    socket.on('message', (trainObject) => {
+    socket.on("message", (trainObject) => {
       // Update the state with the received train data
       setTrainData((prevTrainData) => {
         const updatedTrainData = { ...prevTrainData };
@@ -50,12 +48,12 @@ const MapDetail = () => {
   const trainMarkers = Object.values(trainData);
 
   return (
-    <div className="map-container">
+    <div data-testid="map-detail" className="map-container">
       {/* Create a MapContainer to render the Leaflet map */}
       <MapContainer
         center={[62.173276, 14.942265]} // Initial map center coordinates
         zoom={5} // Initial zoom level
-        style={{ height: '1000px', width: '100%' }}
+        style={{ height: "1000px", width: "100%" }}
       >
         {/* Add a base TileLayer for the map */}
         <TileLayer
@@ -65,13 +63,8 @@ const MapDetail = () => {
 
         {/* Map over trainMarkers to create Marker and Popup components */}
         {trainMarkers.map((train, index) => (
-          <Marker
-            key={index}
-            position={train.position}
-          >
-            <Popup>
-              Train Number: {train.trainnumber}
-            </Popup>
+          <Marker key={index} position={train.position}>
+            <Popup>Train Number: {train.trainnumber}</Popup>
           </Marker>
         ))}
       </MapContainer>
