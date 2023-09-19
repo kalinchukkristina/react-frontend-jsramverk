@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TrainList from './components/TrainList';
 import TrainDetail from './components/TrainDetail';
+import MapDetail from './components/MapDetail';
+import Tickets from './components/Tickets';
 
 function App() {
   const [trains, setTrains] = useState([]);
@@ -32,9 +34,15 @@ function App() {
   return (
     <div className="App">
       {selectedTrain ? (
-        <TrainDetail selectedTrain={selectedTrain} onReturnClick={handleReturnClick} outputDelay={outputDelay}/>
+        <>
+          <TrainDetail selectedTrain={selectedTrain} onReturnClick={handleReturnClick} outputDelay={outputDelay}/>
+          <Tickets selectedTrain={selectedTrain}></Tickets>
+        </>
       ) : (
-        <TrainList trains={trains} onTrainClick={handleTrainClick} outputDelay={outputDelay} />
+        <>
+          <TrainList trains={trains} onTrainClick={handleTrainClick} outputDelay={outputDelay} />
+          <MapDetail />
+        </>
       )}
     </div>
   );
