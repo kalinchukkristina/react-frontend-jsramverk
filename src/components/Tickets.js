@@ -1,55 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const Tickets = ({selectedTrain}) => {
-  const [codes, setCodes] = useState([])
+const Tickets = ({ selectedTrain }) => {
+  const [codes, setCodes] = useState([]);
   const [selectedCode, setSelectedCode] = useState(null);
-  const [allTickets, setAllTickets] = useState([])
+  const [allTickets, setAllTickets] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:1337/codes') //getting the reason codes from backend
+    fetch(`${apiUrl}/codes`) //getting the reason codes from backend
       .then((response) => response.json())
       .then((data) => setCodes(data.data));
-    
-    fetch('http://localhost:1337/tickets') //getting the list of existing tickets from backend
+
+    fetch(`${apiUrl}/tickets`) //getting the list of existing tickets from backend
       .then((response) => response.json())
       .then((data) => setAllTickets(data.data));
-    }, []);
+  }, []);
 
-  const handleSelectChange = (event) => { //callback function for selecting a reason code
+  const handleSelectChange = (event) => {
+    //callback function for selecting a reason code
     const selectedIndex = event.target.value;
     setSelectedCode(codes[selectedIndex]);
   };
 
-  const handleSubmit = () => { //callback function for button 'Skapa nytt ärende'
+  const handleSubmit = () => {
+    //callback function for button 'Skapa nytt ärende'
     if (selectedCode) {
       let newTicket = {
-            code: selectedCode.Code,
-            trainnumber: selectedTrain.OperationalTrainNumber,
-            traindate: selectedTrain.EstimatedTimeAtLocation.substring(0, 10),
-          };
+        code: selectedCode.Code,
+        trainnumber: selectedTrain.OperationalTrainNumber,
+        traindate: selectedTrain.EstimatedTimeAtLocation.substring(0, 10),
+      };
 
-      fetch('http://localhost:1337/tickets', {
+      fetch(`${apiUrl}/tickets`, {
         body: JSON.stringify(newTicket),
         headers: {
-          'content-type': 'application/json'
+          "content-type": "application/json",
         },
-        method: 'POST'
+        method: "POST",
       })
         .then((response) => response.json())
         .then((result) => {
-            setAllTickets([result.data, ...allTickets]) //update the state variable allTickets with the new ticket
+          setAllTickets([result.data, ...allTickets]); //update the state variable allTickets with the new ticket
         })
         .catch((error) => {
-          console.error('Error adding ticket:', error.message);
+          console.error("Error adding ticket:", error.message);
         });
     }
-  }
+  };
 
   return (
-    <div className='ticketContainer'>
+    <div className="ticketContainer">
       <div>
-          <p>Orsakskod:</p>
-          <select className='form-select form-select-sm' onChange={handleSelectChange}>
+        <p>Orsakskod:</p>
+        <select
+          className="form-select form-select-sm"
+          onChange={handleSelectChange}
+        >
           <option value="">Välj en kod...</option>
           {codes.map((code, index) => (
             <option key={index} value={index}>
@@ -57,18 +63,21 @@ const Tickets = ({selectedTrain}) => {
             </option>
           ))}
         </select>
-        <button className='btn btn-success newTicketBtn' onClick={handleSubmit}>Skapa nytt ärende</button>
+        <button className="btn btn-success newTicketBtn" onClick={handleSubmit}>
+          Skapa nytt ärende
+        </button>
       </div>
       <hr />
       <div>
         <h3>Befintliga ärenden</h3>
         {allTickets.map((ticket, index) => (
-          <p key={index}>{ticket.code} - {ticket.trainnumber} - {ticket.traindate}</p>
-        )
-        )}
+          <p key={index}>
+            {ticket.code} - {ticket.trainnumber} - {ticket.traindate}
+          </p>
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Tickets;
