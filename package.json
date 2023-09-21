@@ -2,6 +2,7 @@
   "name": "jsramverk-react-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -19,7 +20,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "REACT_APP_ENV=production react-scripts build && rsync -av --delete build/ krka21@ssh.student.bth.se:www/editor",
+    "build:development": "REACT_APP_ENV=development react-scripts build",
+    "build:production": "REACT_APP_ENV=production react-scripts build"
   },
   "eslintConfig": {
     "extends": [
