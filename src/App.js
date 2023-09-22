@@ -3,14 +3,14 @@ import TrainList from "./components/TrainList";
 import TrainDetail from "./components/TrainDetail";
 import MapDetail from "./components/MapDetail";
 import Tickets from "./components/Tickets";
-const apiUrl = process.env.REACT_APP_API_URL;
+// const apiUrl = process.env.REACT_APP_API_URL;
 
 function App() {
   const [trains, setTrains] = useState([]);
   const [selectedTrain, setSelectedTrain] = useState(null);
 
   useEffect(() => {
-    fetch(`${apiUrl}/delayed`)
+    fetch('https://jsramverk-train-zazi.azurewebsites.net/delayed')
       .then((response) => response.json())
       .then((data) => setTrains(data));
   }, []);
