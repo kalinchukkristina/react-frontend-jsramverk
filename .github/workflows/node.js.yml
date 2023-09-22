@@ -30,6 +30,4 @@ jobs:
       run: npm install
 
     # Removed the npm ci step since npm install is used
-
-    - run: npm run build --if-present
     - run: npm test -- --watchAll=false
