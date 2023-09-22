@@ -27,7 +27,7 @@
 	},
 	"jest": {
 		"setupFilesAfterEnv": [
-			"./jest.setup.js"
+			"src/setupTests.js"
 		]
 	},
 	"eslintConfig": {
