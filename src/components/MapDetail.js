@@ -6,7 +6,6 @@ import "leaflet/dist/leaflet.css"; // Import Leaflet's CSS
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
-const apiUrl = process.env.REACT_APP_API_URL;
 
 let DefaultIcon = L.icon({
   iconUrl: icon,
@@ -22,7 +21,7 @@ const MapDetail = () => {
   // Use the useEffect hook to set up and manage the socket connection
   useEffect(() => {
     // Create a socket connection to the specified server
-    const socket = io(`${apiUrl}`);
+    const socket = io(`https://jsramverk-train-zazi.azurewebsites.net`);
 
     // Event handler for when the socket successfully connects
     socket.on("connect", () => {

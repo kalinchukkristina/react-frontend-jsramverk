@@ -5,8 +5,11 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const client = new ApolloClient({
-  uri: "http://localhost:1337/graphql",
+  uri: `${apiUrl}/graphql`,
   cache: new InMemoryCache(),
 });
 
