@@ -1,52 +1,62 @@
-import React, { useEffect, useState } from "react";
-const apiUrl = process.env.REACT_APP_API_URL;
+import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import { GET_CODES } from "./../queries";
+import { GET_TICKETS } from "./../queries";
+import { CREATE_TICKET } from "./../queries";
 
 const Tickets = ({ selectedTrain }) => {
-  const [codes, setCodes] = useState([]);
+  const {
+    loading: loadingQueryOne,
+    error: errorQueryOne,
+    data: codes,
+  } = useQuery(GET_CODES);
+  let {
+    loading: loadingQueryTwo,
+    error: errorQueryTwo,
+    data: allTickets,
+  } = useQuery(GET_TICKETS);
   const [selectedCode, setSelectedCode] = useState(null);
-  const [allTickets, setAllTickets] = useState([]);
-
-  useEffect(() => {
-    fetch(`${apiUrl}/codes`) //getting the reason codes from backend
-      .then((response) => response.json())
-      .then((data) => setCodes(data.data));
-
-    fetch(`${apiUrl}/tickets`) //getting the list of existing tickets from backend
-      .then((response) => response.json())
-      .then((data) => setAllTickets(data.data));
-  }, []);
+  const [createTicket] = useMutation(CREATE_TICKET, {
+    refetchQueries: [{ query: GET_TICKETS }],
+  });
 
   const handleSelectChange = (event) => {
     //callback function for selecting a reason code
     const selectedIndex = event.target.value;
-    setSelectedCode(codes[selectedIndex]);
+    setSelectedCode(codes.codes[selectedIndex]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     //callback function for button 'Skapa nytt ärende'
     if (selectedCode) {
-      let newTicket = {
-        code: selectedCode.Code,
-        trainnumber: selectedTrain.OperationalTrainNumber,
-        traindate: selectedTrain.EstimatedTimeAtLocation.substring(0, 10),
-      };
-
-      fetch(`${apiUrl}/tickets`, {
-        body: JSON.stringify(newTicket),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          setAllTickets([result.data, ...allTickets]); //update the state variable allTickets with the new ticket
-        })
-        .catch((error) => {
-          console.error("Error adding ticket:", error.message);
+      try {
+        await createTicket({
+          variables: {
+            ticketInput: {
+              code: selectedCode.Code,
+              trainnumber: selectedTrain.OperationalTrainNumber,
+              traindate: selectedTrain.EstimatedTimeAtLocation,
+            },
+          },
         });
+      } catch (mutationError) {
+        console.error("Mutation error:", mutationError);
+      }
     }
   };
+
+  if (loadingQueryOne || loadingQueryTwo) {
+    return <p>Loading...</p>;
+  }
+
+  if (errorQueryOne || errorQueryTwo) {
+    return <p>Error: Something went wrong.</p>;
+  }
+
+  if (!codes || !allTickets) {
+    return <p>No data available</p>;
+  }
 
   return (
     <div className="ticketContainer">
@@ -57,7 +67,7 @@ const Tickets = ({ selectedTrain }) => {
           onChange={handleSelectChange}
         >
           <option value="">Välj en kod...</option>
-          {codes.map((code, index) => (
+          {codes.codes.map((code, index) => (
             <option key={index} value={index}>
               {code.Code} - {code.Level3Description}
             </option>
@@ -70,9 +80,10 @@ const Tickets = ({ selectedTrain }) => {
       <hr />
       <div>
         <h3>Befintliga ärenden</h3>
-        {allTickets.map((ticket, index) => (
+        {allTickets.tickets.map((ticket, index) => (
           <p key={index}>
-            {ticket.code} - {ticket.trainnumber} - {ticket.traindate}
+            {ticket.code} - {ticket.trainnumber} -{" "}
+            {ticket.traindate.substring(0, 10)}
           </p>
         ))}
       </div>
