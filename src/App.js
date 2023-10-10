@@ -3,14 +3,16 @@ import TrainList from "./components/TrainList";
 import TrainDetail from "./components/TrainDetail";
 import MapDetail from "./components/MapDetail";
 import Tickets from "./components/Tickets";
-import LoginRegister from './components/LoginRegister';
+import LoginRegister from "./components/LoginRegister";
 import { useQuery } from "@apollo/client";
 import { GET_DELAYED_TRAINS } from "./queries";
 
 function App() {
   const [selectedTrain, setSelectedTrain] = useState(null);
   const { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
   const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
 
   const handleTrainClick = (train) => {
@@ -34,7 +36,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     setLoggedInUser(null);
   };
@@ -46,8 +48,13 @@ function App() {
     <div className="App">
       {isAuthenticated ? (
         <>
-          <p>Hello there, {loggedInUser}!</p>
-          <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
+          <div className="above-header">
+            <h1>Hello there, {loggedInUser}!</h1>
+            <button onClick={handleLogout} className="btn btn-secondary logout">
+              Logout
+            </button>
+          </div>
+
           {selectedTrain ? (
             <>
               <TrainDetail
@@ -58,14 +65,14 @@ function App() {
               <Tickets selectedTrain={selectedTrain} />
             </>
           ) : (
-            <>
+            <div className="main-container">
               <TrainList
                 trains={data.delayed}
                 onTrainClick={handleTrainClick}
                 outputDelay={outputDelay}
               />
               <MapDetail />
-            </>
+            </div>
           )}
         </>
       ) : (

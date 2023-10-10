@@ -3,7 +3,7 @@ import React from "react";
 const TrainList = ({ trains, onTrainClick, outputDelay }) => {
   return (
     <div data-testid="train-list" className="delayedTrainsList">
-      <h1>Försenade tåg</h1>
+      <h2>Försenade tåg</h2>
       {trains ? (
         <table className="table table-striped table-fixed">
           <tbody>
