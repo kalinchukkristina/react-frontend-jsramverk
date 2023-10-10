@@ -14,35 +14,36 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const MapDetail = () => {
-  // Define state to store train data received from the socket
+const MapDetail = ({ trains }) => {
   const [trainData, setTrainData] = useState({});
 
-  // Use the useEffect hook to set up and manage the socket connection
   useEffect(() => {
-    // Create a socket connection to the specified server
-    const socket = io(`https://jsramverk-train-zazi.azurewebsites.net`);
+    const socket = io(`http://localhost:1337`);
 
-    // Event handler for when the socket successfully connects
     socket.on("connect", () => {
       console.log("Connected to server via socket.");
     });
 
     // Event handler for when a 'message' event is received from the server
     socket.on("message", (trainObject) => {
-      // Update the state with the received train data
-      setTrainData((prevTrainData) => {
-        const updatedTrainData = { ...prevTrainData };
-        updatedTrainData[trainObject.trainnumber] = trainObject;
-        return updatedTrainData;
-      });
+      const trainMatch = trains.find(
+        (train) => train.OperationalTrainNumber === trainObject.trainnumber
+      );
+
+      if (trainMatch) {
+        setTrainData((prevTrainData) => {
+          const updatedTrainData = { ...prevTrainData };
+          updatedTrainData[trainObject.trainnumber] = trainObject;
+          return updatedTrainData;
+        });
+      }
     });
 
     // Cleanup function: Disconnect the socket when the component unmounts
     return () => {
       socket.disconnect();
     };
-  }, []); // Empty dependency array means this effect runs once
+  }, [trains]); // Empty dependency array means this effect runs once
 
   // Extract an array of train markers from the trainData state
   const trainMarkers = Object.values(trainData);
