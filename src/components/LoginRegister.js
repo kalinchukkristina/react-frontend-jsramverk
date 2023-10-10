@@ -1,21 +1,55 @@
 import React, { useState } from 'react';
+import { useMutation } from "@apollo/client";
+import { CREATE_USER, LOGIN_USER } from "./../queries";
 
-function LoginRegister() {
+function LoginRegister({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [createUser] = useMutation(CREATE_USER);
+  const [loginUser] = useMutation(LOGIN_USER);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = () => {
-    console.log('Logging in with', username, password);
+  const handleLogin = async () => {
+    try {
+      const result = await loginUser({
+        variables: {
+          loginInput: {
+            username: username,
+            password: password,
+          },
+        },
+      });
+      console.log('User logged in:', result.data.loginUser.username);
+      localStorage.setItem('token', result.data.loginUser.token);
+      onLoginSuccess(); // Notify the App component about successful login
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setErrorMessage('Invalid username or password.');
+    }
   };
 
-  const handleRegister = () => {
-    console.log('Registering with', username, password);
+  const handleRegister = async () => {
+    try {
+      const result = await createUser({
+        variables: {
+          userInput: {
+            username: username,
+            password: password,
+          },
+        },
+      });
+      console.log('User registered:', result.data.createUser.username);
+    } catch (error) {
+      console.error('Error registering user:', error);
+      setErrorMessage('Error creating account. Please try again.');
+    }
   };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="login-container">
+        {errorMessage && <p className="text-danger">{errorMessage}</p>}
         <h2>{isLogin ? 'Login' : 'Register'}</h2>
         <div className="mb-3">
           <label className="form-label">Username</label>
