@@ -10,7 +10,8 @@ import { GET_DELAYED_TRAINS } from "./queries";
 function App() {
   const [selectedTrain, setSelectedTrain] = useState(null);
   const { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Check if token exists in local storage
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
@@ -23,14 +24,19 @@ function App() {
   const outputDelay = (item) => {
     let advertised = new Date(item.AdvertisedTimeAtLocation);
     let estimated = new Date(item.EstimatedTimeAtLocation);
-
     const diff = Math.abs(estimated - advertised);
-
     return Math.floor(diff / (1000 * 60)) + " minuter";
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (username) => {
     setIsAuthenticated(true);
+    setLoggedInUser(username); // Set the logged-in user's name when login is successful
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    setLoggedInUser(null);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -39,25 +45,29 @@ function App() {
   return (
     <div className="App">
       {isAuthenticated ? (
-        selectedTrain ? (
-          <>
-            <TrainDetail
-              selectedTrain={selectedTrain}
-              onReturnClick={handleReturnClick}
-              outputDelay={outputDelay}
-            />
-            <Tickets selectedTrain={selectedTrain}></Tickets>
-          </>
-        ) : (
-          <>
-            <TrainList
-              trains={data.delayed}
-              onTrainClick={handleTrainClick}
-              outputDelay={outputDelay}
-            />
-            <MapDetail />
-          </>
-        )
+        <>
+          <p>Hello there, {loggedInUser}!</p>
+          <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
+          {selectedTrain ? (
+            <>
+              <TrainDetail
+                selectedTrain={selectedTrain}
+                onReturnClick={handleReturnClick}
+                outputDelay={outputDelay}
+              />
+              <Tickets selectedTrain={selectedTrain} />
+            </>
+          ) : (
+            <>
+              <TrainList
+                trains={data.delayed}
+                onTrainClick={handleTrainClick}
+                outputDelay={outputDelay}
+              />
+              <MapDetail />
+            </>
+          )}
+        </>
       ) : (
         <LoginRegister onLoginSuccess={handleLoginSuccess} />
       )}
