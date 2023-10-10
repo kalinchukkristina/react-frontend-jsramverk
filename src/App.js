@@ -40,27 +40,31 @@ function App() {
 
   return (
     <div className="App">
-      {isAuthenticated ? (
-        selectedTrain ? (
-          <>
-            <TrainDetail
-              selectedTrain={selectedTrain}
-              onReturnClick={handleReturnClick}
-              outputDelay={outputDelay}
-            />
-            <Tickets selectedTrain={selectedTrain}></Tickets>
-          </>
-        ) : (
-          <>
-            <TrainList
-              trains={data.delayed}
-              onTrainClick={handleTrainClick}
-              outputDelay={outputDelay}
-            />
-            <MapDetail trains={data.delayed} />
-          </>
-        )
-      ) : (
+      {isAuthenticated && (
+        <>
+          {selectedTrain ? (
+            <>
+              <TrainDetail
+                selectedTrain={selectedTrain}
+                onReturnClick={handleReturnClick}
+                outputDelay={outputDelay}
+              />
+              <Tickets selectedTrain={selectedTrain} />
+              <MapDetail trains={[selectedTrain]} />
+            </>
+          ) : (
+            <>
+              <TrainList
+                trains={data.delayed}
+                onTrainClick={handleTrainClick}
+                outputDelay={outputDelay}
+              />
+              <MapDetail trains={data.delayed} />
+            </>
+          )}
+        </>
+      )}
+      {!isAuthenticated && (
         <LoginRegister onLoginSuccess={handleLoginSuccess} />
       )}
     </div>
