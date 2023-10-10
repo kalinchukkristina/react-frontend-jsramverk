@@ -16,7 +16,7 @@ const TrainList = ({ trains, onTrainClick, outputDelay }) => {
       {trains ? (
         <>
           <input
-            class="form-control rounded"
+            className="form-control rounded"
             type="text"
             placeholder="Sök efter tågnummer..."
             value={searchQuery}
