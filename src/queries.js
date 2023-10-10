@@ -45,3 +45,22 @@ export const CREATE_TICKET = gql`
     }
   }
 `;
+
+export const CREATE_USER = gql`
+  mutation CreateUser($userInput: UserInput!) {
+    createUser(userInput: $userInput) {
+      _id
+      username
+    }
+  }
+`;
+
+export const LOGIN_USER = gql`
+  mutation ($loginInput: LoginInput) {
+    loginUser(loginInput: $loginInput) {
+      message
+      token
+      username
+    }
+  }
+`;
