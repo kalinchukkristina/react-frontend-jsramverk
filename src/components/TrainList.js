@@ -4,10 +4,10 @@ const TrainList = ({ trains, onTrainClick, outputDelay }) => {
   return (
     <div data-testid="train-list" className="delayedTrainsList">
       <h1>Försenade tåg</h1>
-      {trains.data ? (
+      {trains ? (
         <table className="table table-striped table-fixed">
           <tbody>
-            {trains.data.map((train, index) => (
+            {trains.map((train, index) => (
               <tr key={index} onClick={() => onTrainClick(train)}>
                 <td>{train.OperationalTrainNumber}</td>
                 <td className="trainSignature">

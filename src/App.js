@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TrainList from "./components/TrainList";
 import TrainDetail from "./components/TrainDetail";
 import MapDetail from "./components/MapDetail";
 import Tickets from "./components/Tickets";
-// const apiUrl = process.env.REACT_APP_API_URL;
+import { useQuery } from "@apollo/client";
+import { GET_DELAYED_TRAINS } from "./queries";
 
 function App() {
-  const [trains, setTrains] = useState([]);
   const [selectedTrain, setSelectedTrain] = useState(null);
-
-  useEffect(() => {
-    fetch('https://jsramverk-train-zazi.azurewebsites.net/delayed')
-      .then((response) => response.json())
-      .then((data) => setTrains(data));
-  }, []);
+  const { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
@@ -32,6 +27,9 @@ function App() {
     return Math.floor(diff / (1000 * 60)) + " minuter";
   };
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="App">
       {selectedTrain ? (
@@ -46,7 +44,7 @@ function App() {
       ) : (
         <>
           <TrainList
-            trains={trains}
+            trains={data.delayed}
             onTrainClick={handleTrainClick}
             outputDelay={outputDelay}
           />
