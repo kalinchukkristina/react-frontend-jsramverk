@@ -2,16 +2,28 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import TrainList from "./../components/TrainList";
 
-const sampleTrains = {
-  data: [
-    {
-      OperationalTrainNumber: "1403",
-      LocationSignature: "Karl",
-      FromLocation: [{ LocationName: "A" }],
-      ToLocation: [{ LocationName: "B" }],
-    },
-  ],
-};
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
+
+const sampleTrains = [
+  {
+    OperationalTrainNumber: "1403",
+    LocationSignature: "Karl",
+    FromLocation: [{ LocationName: "A" }],
+    ToLocation: [{ LocationName: "B" }],
+  },
+  {
+    OperationalTrainNumber: "1000",
+    LocationSignature: "Jart",
+    FromLocation: [{ LocationName: "A" }],
+    ToLocation: [{ LocationName: "B" }],
+  },
+];
 
 const mockOnTrainClick = jest.fn();
 const mockOutputDelay = jest.fn();
@@ -31,7 +43,7 @@ test("TrainList component displays a table with data", async () => {
 
   expect(header).toBeInTheDocument();
   expect(table).toBeInTheDocument();
-  expect(rows.length).toBe(sampleTrains.data.length);
+  expect(rows.length).toBe(sampleTrains.length);
 
   await waitFor(() => {
     const operationalTrainNumber = screen.getByText("1403");

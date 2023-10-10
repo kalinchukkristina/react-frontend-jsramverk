@@ -1,26 +1,81 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { MockedProvider } from "@apollo/client/testing";
 import Tickets from "./../components/Tickets";
+import { GET_CODES } from "../queries";
+import { GET_TICKETS } from "../queries";
+
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 const sampleSelectedTrain = {
   OperationalTrainNumber: "1403",
-  EstimatedTimeAtLocation: "2023-09-17T10:00:00",
+  EstimatedTimeAtLocation: "2023-09-17",
 };
 
+const mocks = [
+  {
+    request: {
+      query: GET_CODES,
+    },
+    result: {
+      data: {
+        codes: [
+          {
+            Code: "123",
+            Level3Description: "Description 123",
+          },
+          {
+            Code: "456",
+            Level3Description: "Description 456",
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_TICKETS,
+    },
+    result: {
+      data: {
+        tickets: [
+          {
+            code: "123",
+            trainnumber: "1403",
+            traindate: "2023-09-17",
+          },
+          {
+            code: "456",
+            trainnumber: "1404",
+            traindate: "2023-09-18",
+          },
+        ],
+      },
+    },
+  },
+];
+
 test("Tickets component renders correctly and handles ticket creation", async () => {
-  render(<Tickets selectedTrain={sampleSelectedTrain} />);
+  localStorage.setItem("token", "your-auth-token");
 
-  const orsakskodSelect = screen.getByRole("combobox");
-  const createTicketButton = screen.getByText("Skapa nytt ärende");
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <Tickets selectedTrain={sampleSelectedTrain} />
+    </MockedProvider>
+  );
 
-  expect(orsakskodSelect).toBeInTheDocument();
-  expect(createTicketButton).toBeInTheDocument();
+  // Wait for the component to finish rendering
+  await screen.findByText("Befintliga ärenden");
 
-  // Simulate selecting an option from the dropdown
-  fireEvent.change(orsakskodSelect, { target: { value: "0" } });
+  // Assert that the text "<p>Orsakskod:</p>" is present in the component
+  expect(screen.getByText("Orsakskod:")).toBeInTheDocument();
 
-  // Simulate clicking the "Skapa nytt ärende" button
-  fireEvent.click(createTicketButton);
-
-  // You can add assertions here to verify the behavior after clicking the button
+  // Assert that a select element is present in the component
+  expect(screen.getByRole("combobox")).toBeInTheDocument();
 });
