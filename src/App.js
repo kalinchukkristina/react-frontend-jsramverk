@@ -8,8 +8,9 @@ import { useQuery } from "@apollo/client";
 import { GET_DELAYED_TRAINS } from "./queries";
 
 function App() {
+  const [filteredArray, setFilteredArray] = useState(null);
   const [selectedTrain, setSelectedTrain] = useState(null);
-  const { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
+  let { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
   ); // Check if token exists in local storage
@@ -35,6 +36,14 @@ function App() {
     setIsAuthenticated(true);
   };
 
+  const handleMarkerClick = (clickedTrain, _) => {
+    setFilteredArray(
+      data.delayed.filter(
+        (train) => train.OperationalTrainNumber === clickedTrain.trainnumber
+      )
+    );
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -50,16 +59,23 @@ function App() {
                 outputDelay={outputDelay}
               />
               <Tickets selectedTrain={selectedTrain} />
-              <MapDetail trains={[selectedTrain]} />
+              <MapDetail
+                trains={[selectedTrain]}
+                onMarkerClick={handleMarkerClick}
+                setFilteredArray={setFilteredArray}
+              />
             </>
           ) : (
             <>
               <TrainList
-                trains={data.delayed}
+                trains={filteredArray ? filteredArray : data.delayed}
                 onTrainClick={handleTrainClick}
                 outputDelay={outputDelay}
               />
-              <MapDetail trains={data.delayed} />
+              <MapDetail
+                trains={data.delayed}
+                onMarkerClick={handleMarkerClick}
+              />
             </>
           )}
         </>
