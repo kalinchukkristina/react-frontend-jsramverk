@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER, LOGIN_USER } from "./../queries";
 
 function LoginRegister({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [createUser] = useMutation(CREATE_USER);
   const [loginUser] = useMutation(LOGIN_USER);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
     try {
@@ -20,12 +20,12 @@ function LoginRegister({ onLoginSuccess }) {
           },
         },
       });
-      console.log('User logged in:', result.data.loginUser.username);
-      localStorage.setItem('token', result.data.loginUser.token);
+      console.log("User logged in:", result.data.loginUser.username);
+      localStorage.setItem("token", result.data.loginUser.token);
       onLoginSuccess(); // Notify the App component about successful login
     } catch (error) {
-      console.error('Error logging in:', error);
-      setErrorMessage('Invalid username or password.');
+      console.error("Error logging in:", error);
+      setErrorMessage("Invalid username or password.");
     }
   };
 
@@ -39,23 +39,24 @@ function LoginRegister({ onLoginSuccess }) {
           },
         },
       });
-      console.log('User registered:', result.data.createUser.username);
+      console.log("User registered:", result.data.createUser.username);
     } catch (error) {
-      console.error('Error registering user:', error);
-      setErrorMessage('Error creating account. Please try again.');
+      console.error("Error registering user:", error);
+      setErrorMessage("Error creating account. Please try again.");
     }
   };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="login-container">
+      <div className="login-container" data-testid="login-form">
         {errorMessage && <p className="text-danger">{errorMessage}</p>}
-        <h2>{isLogin ? 'Login' : 'Register'}</h2>
+        <h2>{isLogin ? "Login" : "Register"}</h2>
         <div className="mb-3">
           <label className="form-label">Username</label>
           <input
             type="text"
             className="form-control"
+            data-testid="login-name"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -65,6 +66,7 @@ function LoginRegister({ onLoginSuccess }) {
           <input
             type="password"
             className="form-control"
+            data-testid="login-pwd"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -75,10 +77,11 @@ function LoginRegister({ onLoginSuccess }) {
               Login
             </button>
             <p className="mt-3">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <span
                 className="text-primary cursor-pointer"
                 onClick={() => setIsLogin(false)}
+                data-testid="signUp-link"
               >
                 Sign Up
               </span>
@@ -86,11 +89,15 @@ function LoginRegister({ onLoginSuccess }) {
           </>
         ) : (
           <>
-            <button className="btn btn-primary" onClick={handleRegister}>
+            <button
+              className="btn btn-primary"
+              data-testid="register-btn"
+              onClick={handleRegister}
+            >
               Register
             </button>
             <p className="mt-3">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <span
                 className="text-primary cursor-pointer"
                 onClick={() => setIsLogin(true)}

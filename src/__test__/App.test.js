@@ -11,14 +11,18 @@ const mockHandleTrainClick = jest.fn();
 const mockHandleReturnClick = jest.fn();
 
 const sampleTrains = {
-  data: [
-    {
-      OperationalTrainNumber: "1403",
-      LocationSignature: "Karl",
-      FromLocation: [{ LocationName: "A" }],
-      ToLocation: [{ LocationName: "B" }],
-    },
-  ],
+  data: {
+    delayed: [
+      {
+        OperationalTrainNumber: "1403",
+        LocationSignature: "Karl",
+        FromLocation: [{ LocationName: "A" }],
+        ToLocation: [{ LocationName: "B" }],
+        EstimatedTimeAtLocation: "2023-10-10T15:05:00.000+02:00",
+        AdvertisedTimeAtLocation: "2023-10-11T15:05:00.000+02:00",
+      },
+    ],
+  },
 };
 
 const mocks = [
