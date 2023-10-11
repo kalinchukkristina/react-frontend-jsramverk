@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 
-const TrainList = ({ trains, onTrainClick, outputDelay }) => {
+const TrainList = ({
+  trains,
+  onTrainClick,
+  outputDelay,
+  popUpTrainChosen,
+  setPopUpTrainChosen,
+  setFilteredArray,
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-  const filteredTrains = trains.filter((train) =>
+  const listOfDelayedTrains = trains.filter((train) =>
     train.OperationalTrainNumber.includes(searchQuery)
   );
+
+  const handleCloseButtonClick = () => {
+    setPopUpTrainChosen(false);
+    setFilteredArray(null);
+  };
 
   return (
     <div data-testid="train-list" className="delayedTrainsList">
@@ -23,9 +35,20 @@ const TrainList = ({ trains, onTrainClick, outputDelay }) => {
             onChange={handleSearchChange}
           />
 
+          <div className="close-btn-container">
+            {popUpTrainChosen && (
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={handleCloseButtonClick}
+              ></button>
+            )}
+          </div>
+
           <table className="table table-striped table-fixed">
             <tbody>
-              {filteredTrains.map((train, index) => (
+              {listOfDelayedTrains.map((train, index) => (
                 <tr key={index} onClick={() => onTrainClick(train)}>
                   <td>{train.OperationalTrainNumber}</td>
                   <td className="trainSignature">

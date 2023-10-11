@@ -14,7 +14,7 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const MapDetail = ({ trains, onMarkerClick, setFilteredArray }) => {
+const MapDetail = ({ trains, onMarkerClick }) => {
   const [trainData, setTrainData] = useState({});
 
   useEffect(() => {
@@ -65,7 +65,13 @@ const MapDetail = ({ trains, onMarkerClick, setFilteredArray }) => {
               click: (event) => onMarkerClick(train, event),
             }}
           >
-            <Popup>Train Number: {train.trainnumber}</Popup>
+            <Popup
+              eventHandlers={{
+                click: (event) => console.log("clicked"),
+              }}
+            >
+              Train Number: {train.trainnumber}
+            </Popup>
           </Marker>
         ))}
       </MapContainer>

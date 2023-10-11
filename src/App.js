@@ -9,6 +9,7 @@ import { GET_DELAYED_TRAINS } from "./queries";
 
 function App() {
   const [filteredArray, setFilteredArray] = useState(null);
+  const [popUpTrainChosen, setPopUpTrainChosen] = useState(false);
   const [selectedTrain, setSelectedTrain] = useState(null);
   let { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -42,6 +43,7 @@ function App() {
         (train) => train.OperationalTrainNumber === clickedTrain.trainnumber
       )
     );
+    setPopUpTrainChosen(true);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -71,6 +73,9 @@ function App() {
                 trains={filteredArray ? filteredArray : data.delayed}
                 onTrainClick={handleTrainClick}
                 outputDelay={outputDelay}
+                popUpTrainChosen={popUpTrainChosen}
+                setPopUpTrainChosen={setPopUpTrainChosen}
+                setFilteredArray={setFilteredArray}
               />
               <MapDetail
                 trains={data.delayed}

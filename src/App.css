@@ -50,3 +50,9 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.close-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2%;
+}
