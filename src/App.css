@@ -27,11 +27,8 @@
 }
 
 .map-container {
-  position: absolute;
-  top: 0;
-  right: 0;
   width: 60%;
-  height: 100vh;
+  height: 90vh;
   background-color: #f0f0f0;
   padding: 1rem;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
@@ -51,8 +48,24 @@
   cursor: pointer;
 }
 
+
 .close-btn-container {
   display: flex;
   justify-content: flex-end;
   margin-top: 2%;
+
+.above-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.logout {
+  margin: 1rem;
 }

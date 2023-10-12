@@ -27,14 +27,19 @@ function App() {
   const outputDelay = (item) => {
     let advertised = new Date(item.AdvertisedTimeAtLocation);
     let estimated = new Date(item.EstimatedTimeAtLocation);
-
     const diff = Math.abs(estimated - advertised);
-
     return Math.floor(diff / (1000 * 60)) + " minuter";
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (username) => {
     setIsAuthenticated(true);
+    setLoggedInUser(username); // Set the logged-in user's name when login is successful
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setLoggedInUser(null);
   };
 
   const handleMarkerClick = (clickedTrain, _) => {
@@ -57,8 +62,16 @@ function App() {
 
   return (
     <div className="App">
-      {isAuthenticated && (
+
+      {isAuthenticated ? (
         <>
+          <div className="above-header">
+            <h1>Hello there, {loggedInUser}!</h1>
+            <button onClick={handleLogout} className="btn btn-secondary logout">
+              Logout
+            </button>
+          </div>
+
           {selectedTrain ? (
             <>
               <TrainDetail

@@ -18,7 +18,7 @@ const TrainList = ({
 
   return (
     <div data-testid="train-list" className="delayedTrainsList">
-      <h1>Försenade tåg</h1>
+      <h2>Försenade tåg</h2>
       {trains ? (
         <>
           <input
