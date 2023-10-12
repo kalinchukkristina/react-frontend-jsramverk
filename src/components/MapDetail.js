@@ -84,11 +84,7 @@ const MapDetail = ({ trains, onMarkerClick }) => {
               click: (event) => onMarkerClick(train, event),
             }}
           >
-            <Popup
-              eventHandlers={{
-                click: (event) => console.log("clicked"),
-              }}
-            >
+            <Popup>
               Train Number: {train.trainnumber}
             </Popup>
           </Marker>
