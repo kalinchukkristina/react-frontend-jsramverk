@@ -8,11 +8,13 @@ import { useQuery } from "@apollo/client";
 import { GET_DELAYED_TRAINS } from "./queries";
 
 function App() {
+  const [filteredArray, setFilteredArray] = useState(null);
+  const [popUpTrainChosen, setPopUpTrainChosen] = useState(false);
   const [selectedTrain, setSelectedTrain] = useState(null);
-  const { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
+  let { loading, error, data } = useQuery(GET_DELAYED_TRAINS);
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
-  );
+  ); // Check if token exists in local storage
   const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
 
   const handleTrainClick = (train) => {
@@ -41,12 +43,26 @@ function App() {
     setLoggedInUser(null);
   };
 
+  const handleMarkerClick = (clickedTrain, _) => {
+    setFilteredArray(
+      data.delayed.filter(
+        (train) => train.OperationalTrainNumber === clickedTrain.trainnumber
+      )
+    );
+    setPopUpTrainChosen(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopUpTrainChosen(false);
+    setFilteredArray(null);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="App">
-      {isAuthenticated ? (
+      {isAuthenticated && (
         <>
           <div className="above-header">
             <h1>Hello there, {loggedInUser}!</h1>
@@ -63,19 +79,33 @@ function App() {
                 outputDelay={outputDelay}
               />
               <Tickets selectedTrain={selectedTrain} />
+              <MapDetail
+                trains={[selectedTrain]}
+                onMarkerClick={handleMarkerClick}
+                setFilteredArray={setFilteredArray}
+              />
             </>
           ) : (
-            <div className="main-container">
+            <>
               <TrainList
-                trains={data.delayed}
+                trains={filteredArray ? filteredArray : data.delayed}
                 onTrainClick={handleTrainClick}
                 outputDelay={outputDelay}
+                popUpTrainChosen={popUpTrainChosen}
+                setPopUpTrainChosen={setPopUpTrainChosen}
+                setFilteredArray={setFilteredArray}
+                handlePopupClose={handlePopupClose}
               />
-              <MapDetail />
-            </div>
+              <MapDetail
+                trains={data.delayed}
+                onMarkerClick={handleMarkerClick}
+                handlePopupClose={handlePopupClose}
+              />
+            </>
           )}
         </>
-      ) : (
+      )}
+      {!isAuthenticated && (
         <LoginRegister onLoginSuccess={handleLoginSuccess} />
       )}
     </div>
