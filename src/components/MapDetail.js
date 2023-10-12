@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import icon from "leaflet/dist/images/marker-icon.png";
@@ -13,6 +13,21 @@ let DefaultIcon = L.icon({
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
+
+function PopupCloseHandler({ onPopupClose }) {
+  const map = useMap();
+
+  React.useEffect(() => {
+    map.on('popupclose', onPopupClose);
+
+    // Cleanup
+    return () => {
+      map.off('popupclose', onPopupClose);
+    };
+  }, [map, onPopupClose]);
+
+  return null;
+}
 
 const MapDetail = ({ trains, onMarkerClick }) => {
   const [trainData, setTrainData] = useState({});
@@ -45,6 +60,10 @@ const MapDetail = ({ trains, onMarkerClick }) => {
 
   const trainMarkers = Object.values(trainData);
 
+  const handlePopupClose = () => {
+    console.log('Popup closed');
+  };
+
   return (
     <div data-testid="map-detail" className="map-container">
       <MapContainer
@@ -74,6 +93,7 @@ const MapDetail = ({ trains, onMarkerClick }) => {
             </Popup>
           </Marker>
         ))}
+        <PopupCloseHandler onPopupClose={handlePopupClose} />
       </MapContainer>
     </div>
   );
