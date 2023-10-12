@@ -15,6 +15,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
   ); // Check if token exists in local storage
+  const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
@@ -52,7 +53,6 @@ function App() {
   };
 
   const handlePopupClose = () => {
-    console.log("Popup closed");
     setPopUpTrainChosen(false);
     setFilteredArray(null);
   };
@@ -62,8 +62,7 @@ function App() {
 
   return (
     <div className="App">
-
-      {isAuthenticated ? (
+      {isAuthenticated && (
         <>
           <div className="above-header">
             <h1>Hello there, {loggedInUser}!</h1>
@@ -93,6 +92,8 @@ function App() {
                 onTrainClick={handleTrainClick}
                 outputDelay={outputDelay}
                 popUpTrainChosen={popUpTrainChosen}
+                setPopUpTrainChosen={setPopUpTrainChosen}
+                setFilteredArray={setFilteredArray}
                 handlePopupClose={handlePopupClose}
               />
               <MapDetail
@@ -103,8 +104,7 @@ function App() {
             </>
           )}
         </>
-      )}{" "}
-      :
+      )}
       {!isAuthenticated && (
         <LoginRegister onLoginSuccess={handleLoginSuccess} />
       )}

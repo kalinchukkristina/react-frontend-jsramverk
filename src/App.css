@@ -19,7 +19,7 @@
 
 .ticketContainer {
   padding: 2rem;
-  width: 50%;
+  width: 30%;
 }
 
 .newTicketBtn {
@@ -27,8 +27,11 @@
 }
 
 .map-container {
+  position: absolute;
+  top: 7%;
+  right: 0;
   width: 60%;
-  height: 90vh;
+  height: 100vh;
   background-color: #f0f0f0;
   padding: 1rem;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
@@ -48,11 +51,11 @@
   cursor: pointer;
 }
 
-
 .close-btn-container {
   display: flex;
   justify-content: flex-end;
   margin-top: 2%;
+}
 
 .above-header {
   width: 100%;
