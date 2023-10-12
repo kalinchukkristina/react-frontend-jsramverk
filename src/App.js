@@ -90,7 +90,8 @@ function App() {
             </>
           )}
         </>
-      )}
+      )}{" "}
+      :
       {!isAuthenticated && (
         <LoginRegister onLoginSuccess={handleLoginSuccess} />
       )}
