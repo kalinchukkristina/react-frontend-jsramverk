@@ -18,18 +18,18 @@ function PopupCloseHandler({ onPopupClose }) {
   const map = useMap();
 
   React.useEffect(() => {
-    map.on('popupclose', onPopupClose);
+    map.on("popupclose", onPopupClose);
 
     // Cleanup
     return () => {
-      map.off('popupclose', onPopupClose);
+      map.off("popupclose", onPopupClose);
     };
   }, [map, onPopupClose]);
 
   return null;
 }
 
-const MapDetail = ({ trains, onMarkerClick }) => {
+const MapDetail = ({ trains, onMarkerClick, handlePopupClose }) => {
   const [trainData, setTrainData] = useState({});
 
   useEffect(() => {
@@ -60,10 +60,6 @@ const MapDetail = ({ trains, onMarkerClick }) => {
 
   const trainMarkers = Object.values(trainData);
 
-  const handlePopupClose = () => {
-    console.log('Popup closed');
-  };
-
   return (
     <div data-testid="map-detail" className="map-container">
       <MapContainer
@@ -84,9 +80,7 @@ const MapDetail = ({ trains, onMarkerClick }) => {
               click: (event) => onMarkerClick(train, event),
             }}
           >
-            <Popup>
-              Train Number: {train.trainnumber}
-            </Popup>
+            <Popup>Train Number: {train.trainnumber}</Popup>
           </Marker>
         ))}
         <PopupCloseHandler onPopupClose={handlePopupClose} />

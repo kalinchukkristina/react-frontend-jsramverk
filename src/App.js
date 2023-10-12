@@ -46,6 +46,12 @@ function App() {
     setPopUpTrainChosen(true);
   };
 
+  const handlePopupClose = () => {
+    console.log("Popup closed");
+    setPopUpTrainChosen(false);
+    setFilteredArray(null);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -74,12 +80,12 @@ function App() {
                 onTrainClick={handleTrainClick}
                 outputDelay={outputDelay}
                 popUpTrainChosen={popUpTrainChosen}
-                setPopUpTrainChosen={setPopUpTrainChosen}
-                setFilteredArray={setFilteredArray}
+                handlePopupClose={handlePopupClose}
               />
               <MapDetail
                 trains={data.delayed}
                 onMarkerClick={handleMarkerClick}
+                handlePopupClose={handlePopupClose}
               />
             </>
           )}

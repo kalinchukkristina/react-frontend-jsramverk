@@ -5,8 +5,7 @@ const TrainList = ({
   onTrainClick,
   outputDelay,
   popUpTrainChosen,
-  setPopUpTrainChosen,
-  setFilteredArray,
+  handlePopupClose,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -16,11 +15,6 @@ const TrainList = ({
   const listOfDelayedTrains = trains.filter((train) =>
     train.OperationalTrainNumber.includes(searchQuery)
   );
-
-  const handleCloseButtonClick = () => {
-    setPopUpTrainChosen(false);
-    setFilteredArray(null);
-  };
 
   return (
     <div data-testid="train-list" className="delayedTrainsList">
@@ -41,7 +35,7 @@ const TrainList = ({
                 type="button"
                 className="btn-close"
                 aria-label="Close"
-                onClick={handleCloseButtonClick}
+                onClick={handlePopupClose}
               ></button>
             )}
           </div>
