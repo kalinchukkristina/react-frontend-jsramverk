@@ -70,12 +70,9 @@ test("Tickets component renders correctly and handles ticket creation", async ()
     </MockedProvider>
   );
 
-  // Wait for the component to finish rendering
   await screen.findByText("Befintliga ärenden");
 
-  // Assert that the text "<p>Orsakskod:</p>" is present in the component
   expect(screen.getByText("Orsakskod:")).toBeInTheDocument();
 
-  // Assert that a select element is present in the component
   expect(screen.getByRole("combobox")).toBeInTheDocument();
 });

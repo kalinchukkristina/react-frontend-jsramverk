@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import Tickets from "./../components/Tickets";
 import { GET_CODES } from "../queries";
@@ -104,12 +104,11 @@ test("Tickets component  create a new ticket", async () => {
   const select = screen.getByRole("combobox");
   fireEvent.change(select, { target: { value: "2" } });
 
-  const selectedCodeElement = screen.getByText("000 - Description 000"); // Assuming the option text contains "456 - Description 456"
+  const selectedCodeElement = screen.getByText("000 - Description 000");
   expect(selectedCodeElement).toBeInTheDocument();
 
   const createTicketButton = screen.getByText("Skapa nytt ärende");
   fireEvent.click(createTicketButton);
 
-  // Check if the new ticket is still displayed
   expect(screen.getByText("000 - hello - 2023-09-17")).toBeInTheDocument();
 });
