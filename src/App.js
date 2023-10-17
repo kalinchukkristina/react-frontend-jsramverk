@@ -64,7 +64,7 @@ function App() {
     <div className="App">
       {isAuthenticated && (
         <>
-          <div className="above-header">
+          <div className="above-header" data-testid="welcome">
             <h1>Hello there, {loggedInUser}!</h1>
             <button onClick={handleLogout} className="btn btn-secondary logout">
               Logout
