@@ -67,3 +67,14 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const UPDATE_TICKET = gql`
+  mutation UpdateTicket($ticketId: String!, $ticketInput: TicketInput!) {
+    updateTicket(ticketId: $ticketId, ticketInput: $ticketInput) {
+      _id
+      code
+      trainnumber
+      traindate
+    }
+  }
+`;

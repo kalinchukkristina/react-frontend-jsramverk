@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import { GET_CODES } from "./../queries";
 import { CREATE_TICKET } from "./../queries";
 import { GET_USER } from "./../queries";
+import UpdateTicket from "./UpdateTicket";
 
 const Tickets = ({ selectedTrain, userTickets, userId }) => {
   let {
@@ -13,15 +14,19 @@ const Tickets = ({ selectedTrain, userTickets, userId }) => {
   } = useQuery(GET_CODES);
   const [selectedCode, setSelectedCode] = useState(null);
   const [createTicket] = useMutation(CREATE_TICKET);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState(null);
 
   const handleSelectChange = (event) => {
     //callback function for selecting a reason code
+
     const selectedIndex = event.target.value;
     setSelectedCode(codes.codes[selectedIndex]);
   };
 
   const handleSubmit = async () => {
     //callback function for button 'Skapa nytt ärende'
+
     if (selectedCode) {
       const newTicket = {
         code: selectedCode.Code,
@@ -41,6 +46,11 @@ const Tickets = ({ selectedTrain, userTickets, userId }) => {
         console.error("Mutation error:", mutationError);
       }
     }
+  };
+
+  const openUpdateModal = (ticket) => {
+    setSelectedTicket(ticket);
+    setUpdateModalOpen(true);
   };
 
   if (loadingQueryOne) {
@@ -77,13 +87,25 @@ const Tickets = ({ selectedTrain, userTickets, userId }) => {
       </div>
       <hr />
       <div>
-        <h3>Befintliga ärenden</h3>
-        {[...userTickets.user.tickets].reverse().map((ticket, index) => (
-          <p key={index}>
-            {ticket.code} - {ticket.trainnumber} -{" "}
-            {ticket.traindate.substring(0, 10)}
-          </p>
-        ))}
+        {isUpdateModalOpen ? (
+          <UpdateTicket
+            ticket={selectedTicket}
+            codes={codes.codes}
+            setUpdateModalOpen={setUpdateModalOpen}
+          />
+        ) : (
+          <div>
+            <h3>Befintliga ärenden</h3>
+            {[...userTickets.user.tickets].reverse().map((ticket, index) => (
+              <div key={index}>
+                <p onClick={() => openUpdateModal(ticket)}>
+                  {ticket.code} - {ticket.trainnumber} -{" "}
+                  {ticket.traindate.substring(0, 10)}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
