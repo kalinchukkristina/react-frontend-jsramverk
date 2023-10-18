@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TrainList from "./components/TrainList";
 import TrainDetail from "./components/TrainDetail";
 import MapDetail from "./components/MapDetail";
@@ -6,6 +6,7 @@ import Tickets from "./components/Tickets";
 import LoginRegister from "./components/LoginRegister";
 import { useQuery } from "@apollo/client";
 import { GET_DELAYED_TRAINS } from "./queries";
+import { decodeToken } from "react-jwt";
 
 function App() {
   const [filteredArray, setFilteredArray] = useState(null);
@@ -16,6 +17,14 @@ function App() {
     !!localStorage.getItem("token")
   ); // Check if token exists in local storage
   const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
+      const decoded = decodeToken(token);
+      setLoggedInUser(decoded.username);
+    }
+  }, [isAuthenticated]);
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
@@ -32,9 +41,11 @@ function App() {
     return Math.floor(diff / (1000 * 60)) + " minuter";
   };
 
-  const handleLoginSuccess = (username) => {
+  const handleLoginSuccess = () => {
+    const token = localStorage.getItem("token");
+    const decoded = decodeToken(token);
+    setLoggedInUser(decoded.username);
     setIsAuthenticated(true);
-    setLoggedInUser(username); // Set the logged-in user's name when login is successful
   };
 
   const handleLogout = () => {
