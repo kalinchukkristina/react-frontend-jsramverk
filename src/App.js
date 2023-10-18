@@ -7,6 +7,7 @@ import LoginRegister from "./components/LoginRegister";
 import { useQuery } from "@apollo/client";
 import { GET_DELAYED_TRAINS } from "./queries";
 import { decodeToken } from "react-jwt";
+import { GET_USER } from "./queries";
 
 function App() {
   const [filteredArray, setFilteredArray] = useState(null);
@@ -17,14 +18,21 @@ function App() {
     !!localStorage.getItem("token")
   ); // Check if token exists in local storage
   const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) {
       const token = localStorage.getItem("token");
       const decoded = decodeToken(token);
       setLoggedInUser(decoded.username);
+      setUserId(decoded.userId);
     }
   }, [isAuthenticated]);
+
+  let { data: userTickets } = useQuery(GET_USER, {
+    //getting a list of user's tickets
+    variables: { id: userId },
+  });
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
@@ -89,7 +97,10 @@ function App() {
                 onReturnClick={handleReturnClick}
                 outputDelay={outputDelay}
               />
-              <Tickets selectedTrain={selectedTrain} />
+              <Tickets
+                selectedTrain={selectedTrain}
+                userTickets={userTickets}
+              />
               <MapDetail
                 trains={[selectedTrain]}
                 onMarkerClick={handleMarkerClick}

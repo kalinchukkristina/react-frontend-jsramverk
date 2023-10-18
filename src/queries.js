@@ -26,12 +26,25 @@ export const GET_CODES = gql`
   }
 `;
 
-export const GET_TICKETS = gql`
-  query {
-    tickets {
-      code
-      traindate
-      trainnumber
+// export const GET_TICKETS = gql`
+//   query {
+//     tickets {
+//       code
+//       traindate
+//       trainnumber
+//     }
+//   }
+// `;
+
+export const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      tickets {
+        _id
+        code
+        traindate
+        trainnumber
+      }
     }
   }
 `;

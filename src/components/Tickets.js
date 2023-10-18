@@ -2,23 +2,19 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_CODES } from "./../queries";
-import { GET_TICKETS } from "./../queries";
+// import { GET_TICKETS } from "./../queries";
 import { CREATE_TICKET } from "./../queries";
+import { GET_USER } from "./../queries";
 
-const Tickets = ({ selectedTrain }) => {
-  const {
+const Tickets = ({ selectedTrain, userTickets }) => {
+  let {
     loading: loadingQueryOne,
     error: errorQueryOne,
     data: codes,
   } = useQuery(GET_CODES);
-  let {
-    loading: loadingQueryTwo,
-    error: errorQueryTwo,
-    data: allTickets,
-  } = useQuery(GET_TICKETS);
   const [selectedCode, setSelectedCode] = useState(null);
   const [createTicket] = useMutation(CREATE_TICKET, {
-    refetchQueries: [{ query: GET_TICKETS }],
+    refetchQueries: [{ query: GET_USER }],
   });
 
   const handleSelectChange = (event) => {
@@ -46,15 +42,16 @@ const Tickets = ({ selectedTrain }) => {
     }
   };
 
-  if (loadingQueryOne || loadingQueryTwo) {
+  if (loadingQueryOne) {
     return <p>Loading...</p>;
   }
 
-  if (errorQueryOne || errorQueryTwo) {
-    return <p>Error: Something went wrong.</p>;
+  if (errorQueryOne) {
+    console.log("1", errorQueryOne);
+    return <p></p>;
   }
 
-  if (!codes || !allTickets) {
+  if (!codes || !userTickets) {
     return <p>No data available</p>;
   }
 
@@ -80,7 +77,7 @@ const Tickets = ({ selectedTrain }) => {
       <hr />
       <div>
         <h3>Befintliga ärenden</h3>
-        {allTickets.tickets.map((ticket, index) => (
+        {userTickets.user.tickets.map((ticket, index) => (
           <p key={index}>
             {ticket.code} - {ticket.trainnumber} -{" "}
             {ticket.traindate.substring(0, 10)}
