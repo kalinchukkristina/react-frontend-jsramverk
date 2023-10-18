@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_CODES } from "./../queries";
-// import { GET_TICKETS } from "./../queries";
 import { CREATE_TICKET } from "./../queries";
+import { GET_USER } from "./../queries";
 
 const Tickets = ({ selectedTrain, userTickets, userId }) => {
   let {
@@ -12,9 +12,7 @@ const Tickets = ({ selectedTrain, userTickets, userId }) => {
     data: codes,
   } = useQuery(GET_CODES);
   const [selectedCode, setSelectedCode] = useState(null);
-  const [createTicket] = useMutation(CREATE_TICKET, {
-    refetchQueries: [{ query: GET_TICKETS }],
-  });
+  const [createTicket] = useMutation(CREATE_TICKET);
 
   const handleSelectChange = (event) => {
     //callback function for selecting a reason code
@@ -37,6 +35,7 @@ const Tickets = ({ selectedTrain, userTickets, userId }) => {
             ticketInput: newTicket,
             userId: userId,
           },
+          refetchQueries: [{ query: GET_USER, variables: { id: userId } }],
         });
       } catch (mutationError) {
         console.error("Mutation error:", mutationError);
@@ -79,7 +78,7 @@ const Tickets = ({ selectedTrain, userTickets, userId }) => {
       <hr />
       <div>
         <h3>Befintliga ärenden</h3>
-        {userTickets.user.tickets.map((ticket, index) => (
+        {[...userTickets.user.tickets].reverse().map((ticket, index) => (
           <p key={index}>
             {ticket.code} - {ticket.trainnumber} -{" "}
             {ticket.traindate.substring(0, 10)}
