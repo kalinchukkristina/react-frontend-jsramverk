@@ -50,8 +50,8 @@ export const GET_USER = gql`
 `;
 
 export const CREATE_TICKET = gql`
-  mutation CreateTicket($ticketInput: TicketInput!) {
-    createTicket(ticketInput: $ticketInput) {
+  mutation CreateTicket($ticketInput: TicketInput!, $userId: String!) {
+    createTicket(ticketInput: $ticketInput, userId: $userId) {
       code
       trainnumber
       traindate

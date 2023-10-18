@@ -4,9 +4,8 @@ import { useMutation } from "@apollo/client";
 import { GET_CODES } from "./../queries";
 // import { GET_TICKETS } from "./../queries";
 import { CREATE_TICKET } from "./../queries";
-import { GET_USER } from "./../queries";
 
-const Tickets = ({ selectedTrain, userTickets }) => {
+const Tickets = ({ selectedTrain, userTickets, userId }) => {
   let {
     loading: loadingQueryOne,
     error: errorQueryOne,
@@ -14,7 +13,7 @@ const Tickets = ({ selectedTrain, userTickets }) => {
   } = useQuery(GET_CODES);
   const [selectedCode, setSelectedCode] = useState(null);
   const [createTicket] = useMutation(CREATE_TICKET, {
-    refetchQueries: [{ query: GET_USER }],
+    refetchQueries: [{ query: GET_TICKETS }],
   });
 
   const handleSelectChange = (event) => {
@@ -26,14 +25,17 @@ const Tickets = ({ selectedTrain, userTickets }) => {
   const handleSubmit = async () => {
     //callback function for button 'Skapa nytt ärende'
     if (selectedCode) {
+      const newTicket = {
+        code: selectedCode.Code,
+        trainnumber: selectedTrain.OperationalTrainNumber,
+        traindate: selectedTrain.EstimatedTimeAtLocation,
+      };
+
       try {
         await createTicket({
           variables: {
-            ticketInput: {
-              code: selectedCode.Code,
-              trainnumber: selectedTrain.OperationalTrainNumber,
-              traindate: selectedTrain.EstimatedTimeAtLocation,
-            },
+            ticketInput: newTicket,
+            userId: userId,
           },
         });
       } catch (mutationError) {

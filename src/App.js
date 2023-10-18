@@ -100,6 +100,7 @@ function App() {
               <Tickets
                 selectedTrain={selectedTrain}
                 userTickets={userTickets}
+                userId={userId}
               />
               <MapDetail
                 trains={[selectedTrain]}
