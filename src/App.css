@@ -30,7 +30,7 @@
   position: absolute;
   top: 7%;
   right: 0;
-  width: 60%;
+  width: 57vw;
   height: 100vh;
   background-color: #f0f0f0;
   padding: 1rem;
@@ -71,4 +71,12 @@
 
 .logout {
   margin: 1rem;
+}
+
+.input {
+  margin: 1rem;
+}
+
+.update {
+  margin-right: 1rem;
 }

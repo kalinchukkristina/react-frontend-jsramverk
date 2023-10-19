@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TrainList from "./components/TrainList";
 import TrainDetail from "./components/TrainDetail";
 import MapDetail from "./components/MapDetail";
@@ -6,6 +6,8 @@ import Tickets from "./components/Tickets";
 import LoginRegister from "./components/LoginRegister";
 import { useQuery } from "@apollo/client";
 import { GET_DELAYED_TRAINS } from "./queries";
+import { decodeToken } from "react-jwt";
+import { GET_USER } from "./queries";
 
 function App() {
   const [filteredArray, setFilteredArray] = useState(null);
@@ -16,6 +18,21 @@ function App() {
     !!localStorage.getItem("token")
   ); // Check if token exists in local storage
   const [loggedInUser, setLoggedInUser] = useState(null); // State to store the logged-in user's name
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
+      const decoded = decodeToken(token);
+      setLoggedInUser(decoded.username);
+      setUserId(decoded.userId);
+    }
+  }, [isAuthenticated]);
+
+  let { data: userTickets } = useQuery(GET_USER, {
+    //getting a list of user's tickets
+    variables: { id: userId },
+  });
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
@@ -32,9 +49,11 @@ function App() {
     return Math.floor(diff / (1000 * 60)) + " minuter";
   };
 
-  const handleLoginSuccess = (username) => {
+  const handleLoginSuccess = () => {
+    const token = localStorage.getItem("token");
+    const decoded = decodeToken(token);
+    setLoggedInUser(decoded.username);
     setIsAuthenticated(true);
-    setLoggedInUser(username); // Set the logged-in user's name when login is successful
   };
 
   const handleLogout = () => {
@@ -78,7 +97,11 @@ function App() {
                 onReturnClick={handleReturnClick}
                 outputDelay={outputDelay}
               />
-              <Tickets selectedTrain={selectedTrain} />
+              <Tickets
+                selectedTrain={selectedTrain}
+                userTickets={userTickets}
+                userId={userId}
+              />
               <MapDetail
                 trains={[selectedTrain]}
                 onMarkerClick={handleMarkerClick}

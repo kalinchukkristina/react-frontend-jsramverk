@@ -22,9 +22,8 @@ function LoginRegister({ onLoginSuccess }) {
           },
         },
       });
-      console.log("User logged in:", result.data.loginUser.username);
       localStorage.setItem("token", result.data.loginUser.token);
-      onLoginSuccess(result.data.loginUser.username); // Pass the username back to App.js
+      onLoginSuccess();
     } catch (error) {
       console.error("Error logging in:", error);
       setErrorMessage("Invalid username or password.");
@@ -66,7 +65,9 @@ function LoginRegister({ onLoginSuccess }) {
           <>
             {errorMessage && <p className="text-danger">{errorMessage}</p>}
             {registrationSuccess && (
-              <p className="text-success">Registration successful! Please login.</p>
+              <p className="text-success">
+                Registration successful! Please login.
+              </p>
             )}
             <h2>{isLogin ? "Login" : "Register"}</h2>
             <div className="mb-3">

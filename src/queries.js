@@ -26,19 +26,22 @@ export const GET_CODES = gql`
   }
 `;
 
-export const GET_TICKETS = gql`
-  query {
-    tickets {
-      code
-      traindate
-      trainnumber
+export const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      tickets {
+        _id
+        code
+        traindate
+        trainnumber
+      }
     }
   }
 `;
 
 export const CREATE_TICKET = gql`
-  mutation CreateTicket($ticketInput: TicketInput!) {
-    createTicket(ticketInput: $ticketInput) {
+  mutation CreateTicket($ticketInput: TicketInput!, $userId: String!) {
+    createTicket(ticketInput: $ticketInput, userId: $userId) {
       code
       trainnumber
       traindate
@@ -61,6 +64,17 @@ export const LOGIN_USER = gql`
       message
       token
       username
+    }
+  }
+`;
+
+export const UPDATE_TICKET = gql`
+  mutation UpdateTicket($ticketId: String!, $ticketInput: TicketInput!) {
+    updateTicket(ticketId: $ticketId, ticketInput: $ticketInput) {
+      _id
+      code
+      trainnumber
+      traindate
     }
   }
 `;

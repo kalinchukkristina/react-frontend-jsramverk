@@ -4,6 +4,7 @@ import App from "./../App";
 import { MockedProvider } from "@apollo/client/testing";
 import { GET_DELAYED_TRAINS } from "../queries";
 import { LOGIN_USER } from "../queries";
+import { GET_USER } from "../queries";
 
 const mocks = [
   {
@@ -42,6 +43,32 @@ const mocks = [
           token: "test123",
           username: "test123",
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_USER,
+      variables: {
+        id: null,
+      },
+    },
+    result: {
+      data: {
+        tickets: [
+          {
+            _id: "123123",
+            code: "123",
+            trainnumber: "1403",
+            traindate: "2023-09-17",
+          },
+          {
+            _id: "123124",
+            code: "456",
+            trainnumber: "1404",
+            traindate: "2023-09-18",
+          },
+        ],
       },
     },
   },
