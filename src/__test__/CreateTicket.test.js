@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import Tickets from "./../components/Tickets";
 import { GET_CODES } from "../queries";
-import { GET_TICKETS } from "../queries";
+import { GET_USER } from "../queries";
 import { CREATE_TICKET } from "../queries";
 
 beforeAll(() => {
@@ -17,6 +17,31 @@ afterAll(() => {
 const sampleSelectedTrain = {
   OperationalTrainNumber: "hello",
   EstimatedTimeAtLocation: "2023-09-17",
+};
+const userId = "123";
+const userTickets = {
+  user: {
+    tickets: [
+      {
+        _id: "1111",
+        code: "123",
+        trainnumber: "1403",
+        traindate: "2023-09-17",
+      },
+      {
+        _id: "222222",
+        code: "456",
+        trainnumber: "1404",
+        traindate: "2023-09-18",
+      },
+      {
+        _id: "33333",
+        code: "000",
+        trainnumber: "hello",
+        traindate: "2023-09-17",
+      },
+    ],
+  },
 };
 
 const mocks = [
@@ -45,30 +70,33 @@ const mocks = [
   },
   {
     request: {
-      query: GET_TICKETS,
+      query: GET_USER,
+      variables: {
+        id: "123",
+      },
     },
     result: {
       data: {
-        tickets: [
-          {
-            code: "123",
-            trainnumber: "1403",
-            traindate: "2023-09-17",
-          },
-          {
-            code: "456",
-            trainnumber: "1404",
-            traindate: "2023-09-18",
-          },
-          {
-            code: "000",
-            trainnumber: "hello",
-            traindate: "2023-09-17",
-          },
-        ],
+        user: {
+          tickets: [
+            {
+              _id: "1111",
+              code: "123",
+              trainnumber: "1403",
+              traindate: "2023-09-17",
+            },
+            {
+              _id: "222222",
+              code: "456",
+              trainnumber: "1404",
+              traindate: "2023-09-18",
+            },
+          ],
+        },
       },
     },
   },
+
   {
     request: {
       query: CREATE_TICKET,
@@ -78,6 +106,7 @@ const mocks = [
           trainnumber: "hello",
           traindate: "2023-09-17",
         },
+        userId: "123",
       },
     },
     result: {
@@ -92,10 +121,14 @@ const mocks = [
   },
 ];
 
-test("Tickets component  create a new ticket", async () => {
+test("Tickets component creates a new ticket", async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Tickets selectedTrain={sampleSelectedTrain} />
+      <Tickets
+        selectedTrain={sampleSelectedTrain}
+        userId={userId}
+        userTickets={userTickets}
+      />
     </MockedProvider>
   );
 

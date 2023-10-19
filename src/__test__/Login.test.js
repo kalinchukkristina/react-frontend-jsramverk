@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import App from "./../App";
 import { MockedProvider } from "@apollo/client/testing";
 import { GET_DELAYED_TRAINS } from "../queries";
+import { GET_USER } from "../queries";
 
 const mocks = [
   {
@@ -19,6 +20,32 @@ const mocks = [
             ToLocation: [{ LocationName: "B" }],
             EstimatedTimeAtLocation: "2023-10-10T15:05:00.000+02:00",
             AdvertisedTimeAtLocation: "2023-10-11T15:05:00.000+02:00",
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_USER,
+      variables: {
+        id: null,
+      },
+    },
+    result: {
+      data: {
+        tickets: [
+          {
+            _id: "123123",
+            code: "123",
+            trainnumber: "1403",
+            traindate: "2023-09-17",
+          },
+          {
+            _id: "123124",
+            code: "456",
+            trainnumber: "1404",
+            traindate: "2023-09-18",
           },
         ],
       },
