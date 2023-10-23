@@ -4,12 +4,29 @@ import "./App.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from '@apollo/client/link/context';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = "https://jsramverk-train-zazi.azurewebsites.net";
+
+const httpLink = createHttpLink({
+  uri: `${apiUrl}/graphql`,
+});
+
+const authLink = setContext((_, { headers }) => {
+
+  const authToken = "ctNqwDdwdzcWLou4Q5IDiGOSvI12YNvy";
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: authToken ? `Bearer ${authToken}` : "",
+    }
+  }
+});
 
 const client = new ApolloClient({
-  uri: `${apiUrl}/graphql`,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
@@ -20,7 +37,4 @@ root.render(
   </ApolloProvider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
