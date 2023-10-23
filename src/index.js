@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 
-const apiUrl = "https://jsramverk-train-zazi.azurewebsites.net";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const httpLink = createHttpLink({
   uri: `${apiUrl}/graphql`,
@@ -15,8 +15,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
 
-  const authToken = "ctNqwDdwdzcWLou4Q5IDiGOSvI12YNvy";
-  // return the headers to the context so httpLink can read them
+  const authToken = process.env.SECRET;
   return {
     headers: {
       ...headers,
