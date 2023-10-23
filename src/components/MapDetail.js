@@ -33,7 +33,7 @@ const MapDetail = ({ trains, onMarkerClick, handlePopupClose }) => {
   const [trainData, setTrainData] = useState({});
 
   useEffect(() => {
-    const socket = io(`http://localhost:1337`);
+    const socket = io(`https://jsramverk-train-zazi.azurewebsites.net`);
 
     socket.on("connect", () => {
       console.log("Connected to server via socket.");
