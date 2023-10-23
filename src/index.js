@@ -4,24 +4,28 @@ import "./App.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
-import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
-import { setContext } from '@apollo/client/link/context';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = "https://jsramverk-train-zazi.azurewebsites.net";
 
 const httpLink = createHttpLink({
   uri: `${apiUrl}/graphql`,
 });
 
 const authLink = setContext((_, { headers }) => {
-
-  const authToken = process.env.SECRET;
+  const authToken = "ctNqwDdwdzcWLou4Q5IDiGOSvI12YNvy";
   return {
     headers: {
       ...headers,
       authorization: authToken ? `Bearer ${authToken}` : "",
-    }
-  }
+    },
+  };
 });
 
 const client = new ApolloClient({
