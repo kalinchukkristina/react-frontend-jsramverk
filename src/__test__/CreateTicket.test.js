@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import Tickets from "./../components/Tickets";
 import { GET_CODES } from "../queries";
@@ -15,7 +15,7 @@ afterAll(() => {
 });
 
 const sampleSelectedTrain = {
-  OperationalTrainNumber: "1403",
+  OperationalTrainNumber: "hello",
   EstimatedTimeAtLocation: "2023-09-17",
 };
 const userId = "123";
@@ -33,6 +33,12 @@ const userTickets = {
         code: "456",
         trainnumber: "1404",
         traindate: "2023-09-18",
+      },
+      {
+        _id: "33333",
+        code: "000",
+        trainnumber: "hello",
+        traindate: "2023-09-17",
       },
     ],
   },
@@ -53,6 +59,10 @@ const mocks = [
           {
             Code: "456",
             Level3Description: "Description 456",
+          },
+          {
+            Code: "000",
+            Level3Description: "Description 000",
           },
         ],
       },
@@ -86,6 +96,7 @@ const mocks = [
       },
     },
   },
+
   {
     request: {
       query: CREATE_TICKET,
@@ -95,6 +106,7 @@ const mocks = [
           trainnumber: "hello",
           traindate: "2023-09-17",
         },
+        userId: "123",
       },
     },
     result: {
@@ -109,9 +121,7 @@ const mocks = [
   },
 ];
 
-test("Tickets component renders correctly", async () => {
-  localStorage.setItem("token", "your-auth-token");
-
+test("Tickets component creates a new ticket", async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <Tickets
@@ -124,7 +134,14 @@ test("Tickets component renders correctly", async () => {
 
   await screen.findByText("Befintliga ärenden");
 
-  expect(screen.getByText("Orsakskod:")).toBeInTheDocument();
+  const select = screen.getByRole("combobox");
+  fireEvent.change(select, { target: { value: "2" } });
 
-  expect(screen.getByRole("combobox")).toBeInTheDocument();
+  const selectedCodeElement = screen.getByText("000 - Description 000");
+  expect(selectedCodeElement).toBeInTheDocument();
+
+  const createTicketButton = screen.getByText("Skapa nytt ärende");
+  fireEvent.click(createTicketButton);
+
+  expect(screen.getByText("000 - hello - 2023-09-17")).toBeInTheDocument();
 });

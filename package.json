@@ -2,24 +2,34 @@
   "name": "jsramverk-react-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
+    "@apollo/client": "^3.8.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.1",
+    "date-fns": "^2.30.0",
+    "graphql": "^16.8.1",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-jwt": "^1.2.0",
     "react-leaflet": "^4.2.1",
     "react-scripts": "5.0.1",
+    "save-dev": "^0.0.1-security",
     "socket.io-client": "^4.7.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --watchAll=false",
+    "eject": "react-scripts eject",
+    "deploy": "react-scripts build && rsync -av --delete build/ krka21@ssh.student.bth.se:www/editor",
+    "build:development": "react-scripts build",
+    "build:production": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -40,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.22.11",
     "jest-fetch-mock": "^3.0.3"
   }
 }

@@ -1,39 +1,82 @@
 .delayedTrainsList {
-	height: 100vh;
-	width: 40vw;
-	padding: 2rem;
-	overflow: scroll;
-	background-color: white;
+  height: 100vh;
+  width: 40vw;
+  padding: 2rem;
+  overflow: scroll;
+  background-color: white;
 }
 
 .trainSignature {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .table-fixed {
-	table-layout: fixed;
+  table-layout: fixed;
+  margin-top: 4%;
 }
 
 .ticketContainer {
-	padding: 2rem;
-	width: 50%;
+  padding: 2rem;
+  width: 30%;
 }
 
 .newTicketBtn {
-	margin-top: 15px;
+  margin-top: 15px;
 }
 
 .map-container {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 60%;
-	height: 100vh;
-	background-color: #f0f0f0;
-	padding: 1rem;
-	box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
-	overflow: hidden;
-	z-index: 1;
+  position: absolute;
+  top: 7%;
+  right: 0;
+  width: 57vw;
+  height: 100vh;
+  background-color: #f0f0f0;
+  padding: 1rem;
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.login-container {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.close-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2%;
+}
+
+.above-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.logout {
+  margin: 1rem;
+}
+
+.input {
+  margin: 1rem;
+}
+
+.update {
+  margin-right: 1rem;
 }
